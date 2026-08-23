@@ -1,58 +1,31 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kelorism 🌿
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Platform pemesanan minuman sehat premium berbasis daun kelor (_moringa_) yang dilengkapi dengan fitur rekomendasi personal. Proyek aplikasi web ini dirancang khusus untuk presentasi _business plan_, memadukan tren gaya hidup sehat dengan teknologi modern untuk memberikan pengalaman pengguna yang interaktif.
 
-## About Laravel
+## Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Smart Recommendation:** Fitur kuis interaktif singkat yang secara otomatis mencocokkan produk minuman dengan profil tubuh, target kesehatan, dan selera rasa pelanggan.
+- **Kategorisasi Fungsional:** Menu produk dibagi menjadi kategori spesifik seperti _Daily_, _Diet_, dan _Weight Up_ untuk memudahkan navigasi pembeli.
+- **Desain Responsif:** Antarmuka modern dan bersih yang telah dioptimalkan secara penuh untuk akses melalui perangkat _mobile_ maupun _desktop_.
+- **Database Dinamis:** Pengelolaan data menu dan gambar (_.webp_) yang tersinkronisasi dengan lancar menggunakan sistem _seeder_ bawaan.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend:** Laravel
+- **Frontend:** React.js dipadukan dengan Inertia.js
+- **Styling:** Tailwind CSS
+- **Database:** MySQL
+- **Deployment:** Platform Railway
 
-## Learning Laravel
+## Cara Instalasi di Lokal
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Untuk menjalankan aplikasi ini di komputer lokal, ikuti langkah-langkah berikut:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1.  Kloning repositori ini ke komputer lokal Anda.
+2.  Buka terminal dan jalankan `composer install` untuk mengunduh dependensi PHP.
+3.  Jalankan `npm install` untuk mengunduh dependensi _frontend_.
+4.  Salin file `.env.example` menjadi `.env` lalu sesuaikan konfigurasi database lokal Anda.
+5.  Hasilkan _application key_ dengan menjalankan `php artisan key:generate`.
+6.  Bangun struktur database dan isi data awal menggunakan `php artisan migrate:fresh --seed`.
+7.  Kompilasi aset desain dengan menjalankan `npm run build`.
+8.  Nyalakan server lokal dengan perintah `php artisan serve`.

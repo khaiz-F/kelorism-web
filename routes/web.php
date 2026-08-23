@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PageController::class, 'beranda'])->name('beranda');
 
 // Landing page branding (hero, testimoni, cerita brand)
-Route::get('/beranda', [PageController::class, 'beranda'])->name('beranda');
+Route::get('/beranda', [PageController::class, 'beranda'])->name('beranda.page');
 
 // Menu minuman
 Route::get('/menu', [PageController::class, 'menu'])->name('menu');

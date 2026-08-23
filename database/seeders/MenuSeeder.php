@@ -90,7 +90,7 @@ class MenuSeeder extends Seeder
                 'nama' => 'Kelora Banana Chia', 'kategori' => ['weight_up', 'daily'],
                 'deskripsi' => 'Pisang dan chia seed padat kalori.',
                 'flavor_notes' => ['manis', 'creamy'],
-                'harga' => 32000, 'image' => '/images/menu/weight-up/kelora-banana-chia.webp', 'sustainable' => true,
+                'harga' => 32000, 'image' => '/images/menu/daily/kelora-banana-chia.webp', 'sustainable' => true,
                 'nutrisi' => ['kalori' => 340, 'protein' => 10.0, 'lemak' => 8.0, 'karbo' => 55.0, 'gula' => 26.0, 'serat' => 7.0, 'vitamin_a' => 95, 'vitamin_c' => 20, 'kalsium' => 170],
                 'skor_gizi' => ['protein' => 8, 'serat' => 7, 'vitamin_a' => 4, 'vitamin_c' => 5, 'kalsium' => 6],
             ],

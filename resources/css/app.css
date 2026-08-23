@@ -1,0 +1,171 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Archivo', 'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-cream: #f7f4ea;
+    --color-cream-2: #efead9;
+    --color-forest: #2e4130;
+    --color-forest-2: #243424;
+    --color-sage: #6e9463;
+    --color-sage-light: #a9c79a;
+    --color-sage-pale: #e4eedd;
+    --color-gold: #c89a3e;
+    --color-gold-light: #ead9ad;
+    --color-ink: #20261c;
+    --color-ink-soft: #5b6656;
+    --color-paper: #ffffff;
+
+    --animate-marquee: marquee 28s linear infinite;
+
+    @keyframes marquee {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-50%);
+        }
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Tema tampilan global (Personalisasi Tampilan di halaman Profil)
+|--------------------------------------------------------------------------
+|
+| ARSITEKTUR DUA LAPIS:
+|
+| 1. Token brand (di atas, @theme): --color-cream/forest/sage/ink/paper…
+|    Dipakai utility Tailwind (bg-cream, text-forest, dst.) di semua
+|    komponen. Class tema di <html> menimpa seluruh set token — jadi
+|    ganti tema = ganti "template" satu halaman penuh.
+|
+| 2. Variabel semantik (di bawah): --color-bg / --color-text /
+|    --color-primary — alias menuju token aktif, untuk elemen yang
+|    mau netral tema (mis. bg-[var(--color-bg)]). Tema custom menimpa
+|    KEDUA lapisan ini secara dinamis dari JS.
+|
+| theme-kelor = default (tanpa class); theme-earth: cokelat krem bumi;
+| theme-dark: mode gelap. Tema custom: html[data-tema="custom"].
+*/
+:root {
+    --color-bg: #f7f4ea; /* latar utama halaman */
+    --color-text: #20261c; /* teks utama */
+    --color-primary: #6e9463; /* tombol & aksen utama */
+    --tombol-teks: #f7f4ea; /* teks di atas tombol primary (kontras aman) */
+}
+
+html.theme-kelor {
+    --color-cream: #f7f4ea;
+    --color-cream-2: #efead9;
+    --color-forest: #2e4130;
+    --color-forest-2: #243424;
+    --color-sage: #6e9463;
+    --color-sage-light: #a9c79a;
+    --color-sage-pale: #e4eedd;
+    --color-gold: #c89a3e;
+    --color-gold-light: #ead9ad;
+    --color-ink: #20261c;
+    --color-ink-soft: #5b6656;
+    --color-paper: #ffffff;
+    --color-bg: #f7f4ea;
+    --color-text: #20261c;
+    --color-primary: #6e9463;
+    --tombol-teks: #f7f4ea;
+}
+
+html.theme-earth {
+    --color-cream: #efe6d8;
+    --color-cream-2: #e3d5c0;
+    --color-forest: #4a3524;
+    --color-forest-2: #3a291b;
+    --color-sage: #a9805a;
+    --color-sage-light: #cbb191;
+    --color-sage-pale: #f0e4d3;
+    --color-gold: #b08348;
+    --color-gold-light: #f2e2c4;
+    --color-ink: #2c2013;
+    --color-ink-soft: #6f5f4b;
+    --color-paper: #fffaf1;
+    --color-bg: #efe6d8;
+    --color-text: #2c2013;
+    --color-primary: #a9805a;
+    --tombol-teks: #fffaf1;
+}
+
+html.theme-dark {
+    --color-cream: #1c211a;
+    --color-cream-2: #262d24;
+    --color-forest: #a9c79a;
+    --color-forest-2: #8fb07f;
+    --color-sage: #7da06c;
+    --color-sage-light: #b7d0a6;
+    --color-sage-pale: #2c362a;
+    --color-gold: #d4b062;
+    --color-gold-light: #3d3524;
+    --color-ink: #f0ede3;
+    --color-ink-soft: #b9b8ad;
+    --color-paper: #242b22;
+    --color-bg: #1c211a;
+    --color-text: #f0ede3;
+    --color-primary: #a9c79a;
+    color-scheme: dark;
+    --tombol-teks: #1c211a;
+}
+
+/*
+| Tema custom: JS mengatur nilai spesifik user via style inline pada
+| <html> (lihat lib/tampilan.js — palet dihitung agar kontras teks
+| tetap aman). Blok ini hanya pinning dasar + dark-mode bila gelap.
+*/
+html[data-tema='custom'] {
+    color-scheme: light;
+}
+
+html[data-tema='custom'][data-tema-gelap='1'] {
+    color-scheme: dark;
+}
+
+/* Daun kelor mengambang di hero — pelan, hanya dua kecepatan. */
+.leaf-drift {
+    animation: leaf-drift 7s ease-in-out infinite;
+}
+
+.leaf-drift-slow {
+    animation-duration: 9s;
+    animation-delay: -3s;
+}
+
+@keyframes leaf-drift {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-12px) rotate(3deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .leaf-drift {
+        animation: none;
+    }
+
+    .animate-marquee {
+        animation: none;
+    }
+}

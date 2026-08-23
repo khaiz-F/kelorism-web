@@ -145,9 +145,8 @@ export default function Menu({ minuman }) {
                             Bingung pilih yang mana?
                         </h2>
                         <p className="max-w-xl text-sm leading-relaxed text-ink-soft">
-                            Jawab 3 pertanyaan singkat dan Smart Recommendation
-                            kami akan mencari minuman paling cocok dengan tujuan
-                            kesehatan dan selera rasa kamu.
+                            Jawab 3 pertanyaan singkat & temukan racikan kelor
+                            paling pas untuk target kesehatan serta seleramu.
                         </p>
                         <Link
                             href="/rekomendasi"

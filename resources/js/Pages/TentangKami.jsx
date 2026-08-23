@@ -137,7 +137,7 @@ export default function TentangKami({ misi, nilai, statistik, perjalanan }) {
                             Mari Wujudkan Bersama
                         </h2>
                         <p className="max-w-xl text-sm leading-relaxed text-ink-soft">
-                            Kelorism sedang dalam tahap mewujudkan visi F&B yang
+                            Kelora sedang dalam tahap mewujudkan visi F&B yang
                             sehat dan berdampak. Tertarik untuk berkolaborasi,
                             berinvestasi, atau menjadi pendukung awal kami? Mari
                             berbincang.

@@ -3,15 +3,23 @@
 namespace Database\Seeders;
 
 use App\Models\MenuItem;
+use App\Models\MenuItemCategory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 /**
- * Menu KELORISM sesungguhnya — 13 item dalam 3 kategori:
- * diet (5), weight_up (4), daily (4).
+ * Menu KELORISM sesungguhnya — 12 item dalam 3 kategori:
+ * diet (5), weight_up (4), daily (4). Total per kategori melebihi
+ * jumlah item karena satu item boleh masuk beberapa kategori
+ * (pivot menu_item_category) — mis. Banana Chia di weight_up
+ * sekaligus daily.
  *
  * Slug TIDAK ditulis manual per item — di-generate dari 'nama'
  * via Str::slug() saat updateOrCreate dijalankan.
+ *
+ * 'kategori' kini array kategori (dipakai untuk pivot); kolom
+ * kategori lama di menu_items tetap diisi kategori pertama demi
+ * kompatibilitas, tapi tidak lagi dipakai untuk filtering.
  *
  * Harga mengikuti kisaran pasar minuman premium berklaim kesehatan
  * (Rp25–40 ribu per gelas). Nutrisi = perkiraan nilai gizi per gelas
@@ -28,7 +36,7 @@ class MenuSeeder extends Seeder
         $daftar = [
             // ===== Diet =====
             [
-                'nama' => 'Kelora Oat', 'kategori' => 'diet',
+                'nama' => 'Kelora Oat', 'kategori' => ['diet'],
                 'deskripsi' => 'Oat susu nabati ringan dengan daun kelor.',
                 'flavor_notes' => ['creamy', 'ringan'],
                 'harga' => 28000, 'image' => '/images/menu/diet/kelora-oat.webp', 'sustainable' => true,
@@ -36,7 +44,7 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 5, 'serat' => 5, 'vitamin_a' => 5, 'vitamin_c' => 4, 'kalsium' => 6],
             ],
             [
-                'nama' => 'Kelora Oat Strawberry', 'kategori' => 'diet',
+                'nama' => 'Kelora Oat Strawberry', 'kategori' => ['diet'],
                 'deskripsi' => 'Oat kelor dengan strawberry segar.',
                 'flavor_notes' => ['manis-asam', 'fruity'],
                 'harga' => 30000, 'image' => '/images/menu/diet/kelora-oat-strawberry.webp', 'sustainable' => false,
@@ -44,7 +52,7 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 4, 'serat' => 4, 'vitamin_a' => 5, 'vitamin_c' => 7, 'kalsium' => 5],
             ],
             [
-                'nama' => 'Kelora Oat Blueberry', 'kategori' => 'diet',
+                'nama' => 'Kelora Oat Blueberry', 'kategori' => ['diet'],
                 'deskripsi' => 'Oat kelor dengan blueberry antioxidant.',
                 'flavor_notes' => ['manis-asam', 'fruity'],
                 'harga' => 30000, 'image' => '/images/menu/diet/kelora-oat-blueberry.webp', 'sustainable' => false,
@@ -52,7 +60,7 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 4, 'serat' => 5, 'vitamin_a' => 4, 'vitamin_c' => 6, 'kalsium' => 5],
             ],
             [
-                'nama' => 'Kelora Oat Chia', 'kategori' => 'diet',
+                'nama' => 'Kelora Oat Chia', 'kategori' => ['diet'],
                 'deskripsi' => 'Oat kelor dengan chia seed pengenyang.',
                 'flavor_notes' => ['gurih', 'kenyang'],
                 'harga' => 31000, 'image' => '/images/menu/diet/kelora-oat-chia.webp', 'sustainable' => true,
@@ -60,7 +68,7 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 6, 'serat' => 7, 'vitamin_a' => 5, 'vitamin_c' => 3, 'kalsium' => 7],
             ],
             [
-                'nama' => 'Kelora Oat Yogurt', 'kategori' => 'diet',
+                'nama' => 'Kelora Oat Yogurt', 'kategori' => ['diet'],
                 'deskripsi' => 'Oat kelor dengan yogurt probiotik.',
                 'flavor_notes' => ['asam-segar', 'creamy'],
                 'harga' => 29000, 'image' => '/images/menu/diet/kelora-oat-yogurt.webp', 'sustainable' => false,
@@ -70,7 +78,7 @@ class MenuSeeder extends Seeder
 
             // ===== Weight Up =====
             [
-                'nama' => 'Kelora Oat Choco', 'kategori' => 'weight_up',
+                'nama' => 'Kelora Oat Choco', 'kategori' => ['weight_up'],
                 'deskripsi' => 'Oat kelor cokelat padat kalori.',
                 'flavor_notes' => ['cokelat', 'manis'],
                 'harga' => 33000, 'image' => '/images/menu/weight-up/kelora-oat-choco.webp', 'sustainable' => false,
@@ -78,7 +86,8 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 8, 'serat' => 5, 'vitamin_a' => 4, 'vitamin_c' => 2, 'kalsium' => 6],
             ],
             [
-                'nama' => 'Kelora Banana Chia', 'kategori' => 'weight_up',
+                // Satu item, dua kategori — muncul di tab Weight Up dan Daily.
+                'nama' => 'Kelora Banana Chia', 'kategori' => ['weight_up', 'daily'],
                 'deskripsi' => 'Pisang dan chia seed padat kalori.',
                 'flavor_notes' => ['manis', 'creamy'],
                 'harga' => 32000, 'image' => '/images/menu/weight-up/kelora-banana-chia.webp', 'sustainable' => true,
@@ -86,7 +95,7 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 8, 'serat' => 7, 'vitamin_a' => 4, 'vitamin_c' => 5, 'kalsium' => 6],
             ],
             [
-                'nama' => 'Kelora Oat Peanut', 'kategori' => 'weight_up',
+                'nama' => 'Kelora Oat Peanut', 'kategori' => ['weight_up'],
                 'deskripsi' => 'Oat kelor dengan peanut butter.',
                 'flavor_notes' => ['gurih', 'kacang'],
                 'harga' => 34000, 'image' => '/images/menu/weight-up/kelora-oat-peanut.webp', 'sustainable' => false,
@@ -94,7 +103,7 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 9, 'serat' => 6, 'vitamin_a' => 4, 'vitamin_c' => 2, 'kalsium' => 5],
             ],
             [
-                'nama' => 'Kelora Sweet Potato', 'kategori' => 'weight_up',
+                'nama' => 'Kelora Sweet Potato', 'kategori' => ['weight_up'],
                 'deskripsi' => 'Ubi manis creamy kaya karbo kompleks.',
                 'flavor_notes' => ['manis-alami', 'creamy'],
                 'harga' => 30000, 'image' => '/images/menu/weight-up/kelora-purple-sweet-potato.webp', 'sustainable' => true,
@@ -104,7 +113,7 @@ class MenuSeeder extends Seeder
 
             // ===== Daily =====
             [
-                'nama' => 'Kelora Latte', 'kategori' => 'daily',
+                'nama' => 'Kelora Latte', 'kategori' => ['daily'],
                 'deskripsi' => 'Latte kelor untuk rutinitas harian.',
                 'flavor_notes' => ['lembut', 'gula-aren'],
                 'harga' => 32000, 'image' => '/images/menu/daily/kelora-latte.webp', 'sustainable' => true,
@@ -112,7 +121,7 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 8, 'serat' => 6, 'vitamin_a' => 7, 'vitamin_c' => 9, 'kalsium' => 8],
             ],
             [
-                'nama' => 'Kelora Oat Strawberry Yogurt', 'kategori' => 'daily',
+                'nama' => 'Kelora Oat Strawberry Yogurt', 'kategori' => ['daily'],
                 'deskripsi' => 'Kombinasi oat, strawberry, dan yogurt.',
                 'flavor_notes' => ['manis-asam', 'creamy'],
                 'harga' => 31000, 'image' => '/images/menu/daily/kelora-oat-strawberry-yogurt.webp', 'sustainable' => false,
@@ -120,29 +129,30 @@ class MenuSeeder extends Seeder
                 'skor_gizi' => ['protein' => 6, 'serat' => 4, 'vitamin_a' => 4, 'vitamin_c' => 6, 'kalsium' => 7],
             ],
             [
-                'nama' => 'Kelora Oat Blueberry Yogurt', 'kategori' => 'daily',
+                'nama' => 'Kelora Oat Blueberry Yogurt', 'kategori' => ['daily'],
                 'deskripsi' => 'Kombinasi oat, blueberry, dan yogurt.',
                 'flavor_notes' => ['manis-asam', 'creamy'],
                 'harga' => 31000, 'image' => '/images/menu/daily/kelora-oat-blueberry-yogurt.webp', 'sustainable' => false,
                 'nutrisi' => ['kalori' => 185, 'protein' => 7.0, 'lemak' => 3.5, 'karbo' => 30.0, 'gula' => 13.0, 'serat' => 4.0, 'vitamin_a' => 85, 'vitamin_c' => 26, 'kalsium' => 200],
                 'skor_gizi' => ['protein' => 6, 'serat' => 5, 'vitamin_a' => 4, 'vitamin_c' => 6, 'kalsium' => 7],
             ],
-            [
-                'nama' => 'Kelora Banana Chia Daily', 'kategori' => 'daily',
-                'deskripsi' => 'Pisang chia seed versi daily.',
-                'flavor_notes' => ['manis', 'creamy'],
-                'harga' => 30000, 'image' => '/images/menu/daily/kelora-banana-chia.webp', 'sustainable' => true,
-                'nutrisi' => ['kalori' => 250, 'protein' => 8.0, 'lemak' => 6.0, 'karbo' => 42.0, 'gula' => 20.0, 'serat' => 6.0, 'vitamin_a' => 90, 'vitamin_c' => 18, 'kalsium' => 150],
-                'skor_gizi' => ['protein' => 7, 'serat' => 6, 'vitamin_a' => 4, 'vitamin_c' => 4, 'kalsium' => 5],
-            ],
         ];
 
+        // Bersihkan duplikat lama — "Kelora Banana Chia Daily" kini
+        // mewakilkan Banana Chia yang sama via pivot, bukan row terpisah.
+        MenuItem::where('slug', 'kelora-banana-chia-daily')->delete();
+
+        $slugDaftar = [];
         foreach ($daftar as $i => $item) {
-            MenuItem::updateOrCreate(
-                ['slug' => Str::slug($item['nama'])],
+            $slug = Str::slug($item['nama']);
+            $slugDaftar[] = $slug;
+
+            $menu = MenuItem::updateOrCreate(
+                ['slug' => $slug],
                 [
                     'nama' => $item['nama'],
-                    'kategori' => $item['kategori'],
+                    // Kategori pertama untuk kompatibilitas kolom lama.
+                    'kategori' => $item['kategori'][0],
                     'harga' => $item['harga'],
                     'deskripsi' => $item['deskripsi'],
                     'image' => $item['image'],
@@ -154,6 +164,16 @@ class MenuSeeder extends Seeder
                     'urutan' => $i,
                 ],
             );
+
+            // Sinkronkan kategori via pivot — hapus yang tak terdaftar,
+            // unique(menu_item_id, category) cegah duplikat saat insert.
+            $menu->categories()->whereNotIn('category', $item['kategori'])->delete();
+            foreach ($item['kategori'] as $kategori) {
+                MenuItemCategory::firstOrCreate([
+                    'menu_item_id' => $menu->id,
+                    'category' => $kategori,
+                ]);
+            }
         }
     }
 }

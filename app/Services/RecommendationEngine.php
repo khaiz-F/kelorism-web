@@ -56,13 +56,13 @@ class RecommendationEngine
     public function rekomendasikan(string $tujuan, string $rasa): array
     {
         $kategori = self::TUJUAN_KE_KATEGORI[$tujuan] ?? 'daily';
-        $items = MenuItem::query()->where('is_aktif', true)->orderBy('urutan')->get();
+        $items = MenuItem::query()->with('categories')->where('is_aktif', true)->orderBy('urutan')->get();
 
         return $items
             ->map(fn (MenuItem $item) => [
                 'id' => $item->slug,
                 'nama' => $item->nama,
-                'kategori' => $item->kategori,
+                'kategori' => $item->namaKategori() ?: [$item->kategori],
                 'harga' => $item->harga,
                 'deskripsi' => $item->deskripsi,
                 'flavor_notes' => $item->flavor_notes ?? [],
@@ -89,13 +89,16 @@ class RecommendationEngine
     {
         $skor = 0;
 
-        if ($item->kategori === $kategoriTarget) {
+        // Kategori via pivot (multi) — fallback kolom lama bila pivot kosong.
+        $kategoriItem = $item->namaKategori() ?: [$item->kategori];
+
+        if (in_array($kategoriTarget, $kategoriItem, true)) {
             $skor += 60;
         }
 
         // Item diet selalu ramah untuk tujuan reduce-sugar meski kategorinya
         // bukan target utama (mis. pengguna gain-weight memilih no-sugar).
-        if ($kategoriTarget === 'diet' && $item->kategori === 'diet') {
+        if ($kategoriTarget === 'diet' && in_array('diet', $kategoriItem, true)) {
             $skor += 10;
         }
 

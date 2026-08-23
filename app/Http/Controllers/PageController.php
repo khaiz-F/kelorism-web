@@ -397,9 +397,10 @@ class PageController extends Controller
 
     /**
      * Item menu untuk halaman publik: database (kategori diet/weight_up/
-     * daily) bila terisi, fallback ke daftar statis lama bila tabel
-     * kosong/belum dimigrasi — halaman publik tidak boleh 500 hanya
-     * karena menu belum di-seed.
+     * daily via pivot menu_item_category — satu item bisa multi-kategori)
+     * bila terisi, fallback ke daftar statis lama bila tabel kosong/belum
+     * dimigrasi — halaman publik tidak boleh 500 hanya karena menu
+     * belum di-seed.
      *
      * @return array<int, array<string, mixed>>
      */
@@ -407,6 +408,7 @@ class PageController extends Controller
     {
         try {
             $items = \App\Models\MenuItem::query()
+                ->with('categories')
                 ->where('is_aktif', true)
                 ->orderBy('urutan')
                 ->get();
@@ -421,7 +423,9 @@ class PageController extends Controller
         return $items->map(fn ($m) => [
             'id' => $m->slug,
             'nama' => $m->nama,
-            'kategori' => $m->kategori,
+            // Kategori via pivot — array; kolom lama 'kategori' hanya
+            // fallback bila pivot kosong (mis. belum di-seed ulang).
+            'kategori' => $m->namaKategori() ?: [$m->kategori],
             'harga' => $m->harga,
             'tagline' => $m->deskripsi,
             'flavor_notes' => $m->flavor_notes ?? [],

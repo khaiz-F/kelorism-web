@@ -244,7 +244,7 @@ function HasilCard({ item, utama = false }) {
                 <div className="flex flex-1 flex-col gap-4">
                     <div className="flex items-start justify-between gap-4">
                         <div>
-                            <p className="text-[11px] font-bold tracking-[0.18em] text-sage uppercase">{minuman.kategori}</p>
+                            <p className="text-[11px] font-bold tracking-[0.18em] text-sage uppercase">{Array.isArray(minuman.kategori) ? minuman.kategori.join(" · ") : minuman.kategori}</p>
                             <h3 className="font-display text-2xl font-bold text-forest">{minuman.nama}</h3>
                             <p className="mt-1 text-sm text-ink-soft">{minuman.tagline}</p>
                         </div>

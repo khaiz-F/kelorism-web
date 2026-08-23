@@ -36,6 +36,9 @@ function GridMenu({ daftar, onPilih }) {
  * Tab kategori menu — tetap: Diet, Weight Up, Daily.
  * "Kurangi gula" bukan kategori: level gula dipilih per item saat
  * memesan (modifier per-order, sama pola dengan preferensi rasa kuis).
+ *
+ * m.kategori berupa array (pivot menu_item_category) — satu item
+ * bisa muncul di beberapa tab sekaligus.
  */
 const TAB_KATEGORI = [
     { id: "semua", nama: "Semua" },
@@ -52,7 +55,9 @@ export default function Menu({ minuman }) {
                 jumlah:
                     k.id === "semua"
                         ? minuman.length
-                        : minuman.filter((m) => m.kategori === k.id).length,
+                        : minuman.filter((m) =>
+                              m.kategori?.includes(k.id),
+                          ).length,
             })).filter((k) => k.id === "semua" || k.jumlah > 0),
         [minuman],
     );
@@ -63,7 +68,7 @@ export default function Menu({ minuman }) {
         () =>
             filter === "semua"
                 ? minuman
-                : minuman.filter((m) => m.kategori === filter),
+                : minuman.filter((m) => m.kategori?.includes(filter)),
         [minuman, filter],
     );
 

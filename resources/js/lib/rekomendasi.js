@@ -61,8 +61,13 @@ export function hitungSkor(minuman, { tujuan, rasa }) {
     let skor = 0;
 
     // 1) Kecocokan kategori tujuan — maksimal 60 poin.
+    // kategori berupa array (pivot multi-kategori); fallback string
+    // untuk daftar statis lama yang belum punya pivot.
     const kategoriTarget = bobotTujuan[tujuan] ?? 'daily';
-    if (minuman.kategori === kategoriTarget) {
+    const kategoriItem = Array.isArray(minuman.kategori)
+        ? minuman.kategori
+        : [minuman.kategori];
+    if (kategoriItem.includes(kategoriTarget)) {
         skor += 60;
     }
 

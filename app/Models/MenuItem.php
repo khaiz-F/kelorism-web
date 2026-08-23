@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Item menu KELORISM — dikelola admin, dirujuk order lewat slug.
@@ -35,6 +36,29 @@ class MenuItem extends Model
 
     /** Kategori valid — enum di migration harus selaras dengan ini. */
     public const KATEGORI = ['diet', 'weight_up', 'daily'];
+
+    /**
+     * Kategori item via pivot menu_item_category — satu item boleh
+     * masuk beberapa kategori. Kolom 'kategori' lama masih ada tapi
+     * tidak lagi dipakai untuk filtering.
+     *
+     * @return HasMany<MenuItemCategory, $this>
+     */
+    public function categories(): HasMany
+    {
+        return $this->hasMany(MenuItemCategory::class);
+    }
+
+    /**
+     * Daftar nama kategori item (mis. ['weight_up', 'daily']) —
+     * praktis untuk mapping ke frontend.
+     *
+     * @return array<int, string>
+     */
+    public function namaKategori(): array
+    {
+        return $this->categories->pluck('category')->all();
+    }
 
     protected function casts(): array
     {

@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(PHP=\"/mnt/c/laragonn/bin/php/php-8.5.3-Win32-vs17-x64/php.exe\"; \"$PHP\" -l app/Http/Controllers/Auth/AuthenticatedSessionController.php && \"$PHP\" -l app/Http/Controllers/Auth/RegisteredUserController.php)"
+    ]
+  }
+}

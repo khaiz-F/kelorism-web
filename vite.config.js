@@ -24,6 +24,11 @@ export default defineConfig({
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
+            // WSL2 + /mnt/c (9p): chokidar inotify tidak andal, edit file
+            // sering tak terdeteksi sehingga CSS/JS tersaji basi. Polling
+            // memaksa cek berkala — satu-satunya cara yang stabil di sini.
+            usePolling: true,
+            interval: 300,
         },
     },
 });

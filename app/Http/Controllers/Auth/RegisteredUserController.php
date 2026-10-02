@@ -54,6 +54,8 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect('/beranda');
+        // intended() mengembalikan ke halaman asal bila daftar karena
+        // dialihkan dari halaman terproteksi; default: beranda.
+        return redirect()->intended('/');
     }
 }

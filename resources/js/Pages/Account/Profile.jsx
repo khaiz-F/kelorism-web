@@ -20,6 +20,7 @@ import {
     BadgeCheckIcon,
     CameraIcon,
     CheckCircleIcon,
+    CopyIcon,
     CupSlashIcon,
     GiftIcon,
     LeafIcon,
@@ -31,6 +32,7 @@ import {
     ShieldIcon,
     TicketIcon,
     TreeIcon,
+    VoucherIcon,
     UserIcon,
     XIcon,
 } from '../../Components/primitives/icons';
@@ -376,50 +378,88 @@ function RodaWarnaCustom({ aktif, hexAwal, onPilih }) {
 
 /* ================= E-Voucher ================= */
 
+/** Salin teks ke clipboard — API native, fallback execCommand untuk
+ * konteks tidak aman (http .test lokal) yang memblok clipboard API. */
+async function salinTeks(teks) {
+    try {
+        await navigator.clipboard.writeText(teks);
+    } catch {
+        const t = document.createElement('textarea');
+        t.value = teks;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        t.remove();
+    }
+}
+
 /** Kartu voucher — kode paperless + harga poin; tombol tukar poin.
- * Latar glassmorphism adaptif tema (seragam dengan Card Saldo); teks
- * memakai warna teks tema global agar kontras di tema apa pun. */
-function VoucherCard({ voucher, onPakai }) {
+ * Latar hijau forest senada kartu saldo/Leaf Point; teks cream kontras
+ * penuh. Tombol tukar nonaktif (cream pudar) bila saldo tidak cukup. */
+function VoucherCard({ voucher, poin = 0, onPakai, onSalin }) {
     const dipakai = voucher.terpakai;
+    const cukup = poin >= (voucher.poin ?? 0);
     return (
         <article
-            className={`relative flex flex-col gap-4 overflow-hidden rounded-3xl border border-[var(--color-primary)]/20 bg-white/80 p-6 backdrop-blur-md transition-all duration-300 dark:bg-black/20 ${
+            className={`relative flex flex-col gap-4 overflow-hidden rounded-3xl border border-forest-2 bg-forest p-6 text-cream transition-all duration-300 ${
                 dipakai ? 'opacity-70' : 'shadow-[0_14px_36px_-26px_rgba(46,65,48,0.4)] hover:-translate-y-1 hover:shadow-xl'
             }`}
         >
             <div className="flex items-center gap-3">
                 <span
-                    className={`grid h-11 w-11 place-items-center rounded-full border border-[var(--color-primary)]/20 ${
+                    className={`grid h-11 w-11 shrink-0 place-items-center rounded-full bg-forest-2 text-sage-light ${
                         dipakai ? 'opacity-70' : ''
-                    } bg-white/80 text-[var(--color-primary)] backdrop-blur-md dark:bg-black/20`}
+                    }`}
                 >
-                    <TicketIcon className="h-5 w-5" />
+                    <VoucherIcon className="h-5 w-5" />
                 </span>
                 <div>
-                    <h3 className="font-display text-base font-bold text-[var(--color-text)]">{voucher.judul}</h3>
-                    <p className="text-xs text-[var(--color-text)] opacity-60">Berlaku sampai {voucher.berlakuHingga}</p>
+                    <h3 className="font-display text-base font-bold">{voucher.judul}</h3>
+                    <p className="text-xs text-cream/65">Berlaku sampai {voucher.berlakuHingga}</p>
                 </div>
             </div>
 
-            <p className="text-sm leading-relaxed text-[var(--color-text)] opacity-70">{voucher.detail}</p>
+            <p className="text-sm leading-relaxed text-cream/75">{voucher.detail}</p>
 
             {/* Harga poin — chip menonjol di bawah deskripsi. */}
-            <p className="inline-flex self-start items-center gap-1.5 rounded-full border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/15 px-3 py-1.5 text-xs font-bold text-[var(--color-text)]">
-                <LeafIcon className="h-4 w-4 text-[var(--color-primary)]" /> Senilai: {voucher.poin} Poin
+            <p className="inline-flex self-start items-center gap-1.5 rounded-full bg-forest-2 px-3 py-1.5 text-xs font-bold text-cream">
+                <LeafIcon className="h-4 w-4 text-sage-light" /> Senilai: {voucher.poin} Poin
             </p>
 
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-dashed border-[var(--color-text)]/20 pt-4">
-                <code className="rounded-lg bg-[var(--color-primary)]/10 px-3 py-1.5 font-mono text-sm font-bold tracking-wider text-[var(--color-text)]">
-                    {voucher.kode}
-                </code>
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-dashed border-cream/25 pt-4">
+                <div className="flex items-center gap-1.5">
+                    <code className="rounded-lg bg-cream/15 px-3 py-1.5 font-mono text-sm font-bold tracking-wider text-gold-light">
+                        {voucher.kode}
+                    </code>
+                    <button
+                        type="button"
+                        onClick={async () => {
+                            await salinTeks(voucher.kode);
+                            onSalin?.();
+                        }}
+                        aria-label={`Salin kode ${voucher.kode}`}
+                        title="Salin Kode"
+                        className="grid h-8 w-8 cursor-pointer place-items-center rounded-full text-cream/75 transition-colors hover:bg-cream/15 hover:text-cream focus-visible:outline-2 focus-visible:outline-sage-light"
+                    >
+                        <CopyIcon className="h-4 w-4" />
+                    </button>
+                </div>
                 {dipakai ? (
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-primary)]">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-sage-light">
                         <CheckCircleIcon className="h-4 w-4" /> Sudah dipakai
                     </span>
-                ) : (
+                ) : cukup ? (
                     <Button size="sm" variant="accent" onClick={() => onPakai(voucher)}>
                         <LeafIcon className="h-4 w-4" /> Tukar Poin
                     </Button>
+                ) : (
+                    <button
+                        type="button"
+                        disabled
+                        className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full bg-cream/10 px-4 py-2 text-sm font-semibold text-cream/60"
+                    >
+                        Poin Tidak Cukup
+                    </button>
                 )}
             </div>
         </article>
@@ -447,6 +487,15 @@ export default function Profile({ user, leafPoint, tukarPoin, vouchers }) {
     const [voucherState, setVoucherState] = useState(vouchers ?? []);
     const [tukarOpen, setTukarOpen] = useState(false);
     const [kodeDipakai, setKodeDipakai] = useState([]);
+    const [toast, setToast] = useState('');
+    const toastTimer = useRef(null);
+
+    /** Notifikasi singkat ("Tersalin") — hilang sendiri dalam 2 detik. */
+    const tampilkanToast = (pesan) => {
+        setToast(pesan);
+        clearTimeout(toastTimer.current);
+        toastTimer.current = setTimeout(() => setToast(''), 2000);
+    };
 
     // Avatar: upload via input file tersembunyi — validasi format & ukuran
     // di klien (server memvalidasi ulang dengan aturan image/mimes/max).
@@ -834,21 +883,31 @@ export default function Profile({ user, leafPoint, tukarPoin, vouchers }) {
                 >
                     <span id="voucher" className="-mt-24 block scroll-mt-28" aria-hidden="true" />
 
-                    {/* Saldo poin — banner menonjol di atas daftar voucher.
-                        Glassmorphism adaptif tema: latar putih transparan
-                        (+ gelap bila tema dark/custom gelap), blur, dan
-                        teks memakai warna teks tema agar selalu kontras.
+                    {/* Saldo poin — banner hijau forest di atas daftar voucher,
+                        senada kartu Leaf Point; teks cream kontras penuh.
                         mt-6 memberi jarak dari judul section di atas. */}
-                    <div className="relative mt-6 flex items-center gap-4 overflow-hidden rounded-2xl border border-[var(--color-primary)]/20 bg-white/80 px-5 py-4 backdrop-blur-md shadow-[0_18px_44px_-26px_rgba(46,65,48,0.55)] [html[data-tema-gelap='1']_&]:bg-black/20 dark:bg-black/20">
-                        <LeafIcon className="pointer-events-none absolute -right-4 -bottom-6 h-20 w-20 text-[var(--color-primary)] opacity-20" />
-                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[var(--color-primary)]/20 bg-white/80 text-[var(--color-primary)] backdrop-blur-md dark:bg-black/20">
+                    <div className="relative mt-6 flex items-center gap-4 overflow-hidden rounded-2xl bg-forest px-5 py-4 text-cream shadow-[0_18px_44px_-26px_rgba(46,65,48,0.55)]">
+                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-forest-2 text-sage-light">
                             <LeafIcon className="h-5 w-5" />
                         </span>
                         <div className="relative">
-                            <p className="text-[10px] font-bold tracking-[0.2em] text-[var(--color-text)] opacity-70 uppercase">Saldo Leaf Point Anda</p>
-                            <p className="mt-0.5 font-display text-2xl font-bold text-[var(--color-text)]">
+                            <p className="text-[10px] font-bold tracking-[0.2em] text-sage-light uppercase">Saldo Leaf Point Anda</p>
+                            <p className="mt-0.5 font-display text-2xl font-bold">
                                 {poin.toLocaleString('id-ID')} <span className="text-sm font-semibold opacity-75">Poin</span>
                             </p>
+                            {/* Saldo kosong — arahkan cara dapat poin, jangan dead-end. */}
+                            {poin === 0 && (
+                                <p className="mt-1 text-xs leading-relaxed text-cream/75">
+                                    Kumpulkan poin dari setiap pembelian.{' '}
+                                    <Link
+                                        href="#leaf-point"
+                                        preserveScroll
+                                        className="font-bold text-sage-light underline-offset-2 hover:underline"
+                                    >
+                                        Lihat cara dapat poin →
+                                    </Link>
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -857,6 +916,8 @@ export default function Profile({ user, leafPoint, tukarPoin, vouchers }) {
                             <VoucherCard
                                 key={v.id}
                                 voucher={v}
+                                poin={poin}
+                                onSalin={() => tampilkanToast('Tersalin')}
                                 onPakai={(voucher) => {
                                     // Tukar poin: saldo berkurang, voucher tandai terpakai.
                                     setPoin((p) => Math.max(0, p - (voucher.poin ?? 0)));
@@ -886,6 +947,16 @@ export default function Profile({ user, leafPoint, tukarPoin, vouchers }) {
                     onClose={() => setTukarOpen(false)}
                     onTukar={handleTukar}
                 />
+            )}
+
+            {/* Toast salin kode — fixed bawah, dibacakan screen reader. */}
+            {toast && (
+                <p
+                    role="status"
+                    className="fixed bottom-6 left-1/2 z-[70] -translate-x-1/2 rounded-full bg-forest px-5 py-2.5 text-sm font-bold text-cream shadow-xl"
+                >
+                    {toast}
+                </p>
             )}
         </>
     );

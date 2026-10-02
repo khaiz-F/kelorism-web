@@ -243,7 +243,7 @@ export function RadarLeafIcon({ size = 24, variant = 'full', label, className = 
         width: size,
         height: size,
         className,
-        ariaHidden: label ? undefined : true,
+        'aria-hidden': label ? undefined : true,
         role: label ? 'img' : undefined,
         'aria-label': label,
     };
@@ -335,12 +335,24 @@ export function CakeIcon({ className, label }) {
     );
 }
 
-/** Voucher/tiket — kartu tukar poin. */
+/** Voucher kupon bertema daun — kupon Kelorism, bukan tiket generik. */
 export function VoucherIcon({ className, label }) {
     return (
         <Svg className={className} label={label}>
             <path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h11A2.5 2.5 0 0 1 20 8.5v1.8a2 2 0 0 0 0 3.9v1.8a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 16v-1.8a2 2 0 0 0 0-3.9V8.5Z" />
             <path d="M13.5 6.5v11" strokeDasharray="2 3" />
+            <path d="M6.5 14.5c0-3 2-5 5-5 0 3-2 5-5 5Z" />
+            <path d="m7.5 13.5 2.5-2.5" />
+        </Svg>
+    );
+}
+
+/** Salin — dua tumpukan persegi (copy ke clipboard). */
+export function CopyIcon({ className, label }) {
+    return (
+        <Svg className={className} label={label}>
+            <rect x="9" y="9" width="10" height="10" rx="2" />
+            <path d="M5 14.5A1.5 1.5 0 0 1 4 13V6a2 2 0 0 1 2-2h7a1.5 1.5 0 0 1 1.5 1" />
         </Svg>
     );
 }

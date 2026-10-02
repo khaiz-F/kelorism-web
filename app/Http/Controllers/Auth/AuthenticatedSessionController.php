@@ -27,9 +27,9 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      *
-     * Pelanggan kembali ke beranda '/'; staf/mitra (role staff) langsung
-     * diarahkan ke dashboard. intended() tetap menghormati URL asal bila
-     * pengguna dialihkan dari halaman terproteksi.
+     * Pelanggan kembali ke beranda '/'; staf (role staff/super_admin)
+     * langsung ke panel admin. intended() tetap menghormati URL tujuan
+     * awal bila pengguna dialihkan dari halaman terproteksi.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -40,9 +40,10 @@ class AuthenticatedSessionController extends Controller
         $peran = $request->user()->role;
         $staf = in_array($peran, ['staff', 'super_admin'], true);
 
-        // Staf/langsung ke panel admin; pelanggan ke beranda (dashboard
-        // pelanggan dihapus saat pivot ke admin panel).
-        return redirect()->intended($staf ? '/admin' : '/beranda');
+        // Staf langsung ke panel admin; pelanggan ke beranda. intended()
+        // tetap menghormati URL tujuan awal bila tadi dialihkan dari
+        // halaman terproteksi.
+        return redirect()->intended($staf ? '/admin' : '/');
     }
 
     /**

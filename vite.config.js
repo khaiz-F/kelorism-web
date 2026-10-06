@@ -10,7 +10,8 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.jsx'],
             refresh: true,
             fonts: [
-                bunny('Archivo', {
+                // Fraunces — serif editorial untuk display; Manrope untuk body/UI.
+                bunny('Fraunces', {
                     weights: [400, 500, 600, 700],
                 }),
                 bunny('Manrope', {

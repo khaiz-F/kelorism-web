@@ -12,31 +12,37 @@ class MenuModelTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_seeder_mengisi_13_item_tiga_kategori(): void
+    public function test_seeder_mengisi_10_item_tiga_kategori(): void
     {
         $this->seed(MenuSeeder::class);
 
-        $this->assertSame(13, MenuItem::count());
-        $this->assertSame(5, MenuItem::where('kategori', 'diet')->count());
-        $this->assertSame(4, MenuItem::where('kategori', 'weight_up')->count());
-        $this->assertSame(4, MenuItem::where('kategori', 'daily')->count());
+        $this->assertSame(10, MenuItem::count());
+        $this->assertSame(2, MenuItem::where('kategori', 'diet')->count());
+        $this->assertSame(5, MenuItem::where('kategori', 'weight_up')->count());
+        $this->assertSame(3, MenuItem::where('kategori', 'daily')->count());
 
         // Semua item kini punya harga final + data presentasi lengkap.
-        $this->assertSame(13, MenuItem::whereNotNull('harga')->count());
-        $this->assertSame(13, MenuItem::whereNotNull('image')->count());
-        $this->assertSame(13, MenuItem::whereNotNull('nutrisi')->count());
-        $this->assertSame(13, MenuItem::whereNotNull('skor_gizi')->count());
+        $this->assertSame(10, MenuItem::whereNotNull('harga')->count());
+        $this->assertSame(10, MenuItem::whereNotNull('image')->count());
+        $this->assertSame(10, MenuItem::whereNotNull('nutrisi')->count());
+        $this->assertSame(10, MenuItem::whereNotNull('skor_gizi')->count());
 
         // Item contoh ada dengan flavor notes json.
-        $oat = MenuItem::where('slug', 'kelora-oat')->firstOrFail();
-        $this->assertSame(['creamy', 'ringan'], $oat->flavor_notes);
+        $berry = MenuItem::where('slug', 'kelora-berry-strawberry-oat-kelora')->firstOrFail();
+        $this->assertSame(['manis-asam', 'fruity'], $berry->flavor_notes);
+        $this->assertSame(30000, $berry->harga);
+
+        // Item unggulan "Kelora Chia" — harga Rp15.000 + image weight-up.
+        $chia = MenuItem::where('slug', 'kelora-chia')->firstOrFail();
+        $this->assertSame(15000, $chia->harga);
+        $this->assertSame('/images/menu/weight-up/kelora-chia.webp', $chia->image);
     }
 
     public function test_seeder_kelora_latte_punya_harga_dan_skor_gizi(): void
     {
         $this->seed(MenuSeeder::class);
 
-        $latte = MenuItem::where('slug', 'kelora-latte')->firstOrFail();
+        $latte = MenuItem::where('slug', 'kelora-latte-creamy-moringa-latte')->firstOrFail();
 
         // Harga premium di kisaran pasar Rp25–40 ribu.
         $this->assertSame(32000, $latte->harga);
@@ -59,7 +65,7 @@ class MenuModelTest extends TestCase
 
         $props = $this->get('/rekomendasi')->assertOk()->inertiaProps();
 
-        $latte = collect($props['minuman'])->firstWhere('id', 'kelora-latte');
+        $latte = collect($props['minuman'])->firstWhere('id', 'kelora-latte-creamy-moringa-latte');
         $this->assertNotNull($latte);
         $this->assertSame(32000, $latte['harga']);
         $this->assertSame('/images/menu/daily/kelora-latte.webp', $latte['image']);

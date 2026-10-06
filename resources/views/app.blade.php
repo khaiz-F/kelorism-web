@@ -9,6 +9,7 @@
     <title>KELORISM — Minuman Kelor Premium</title>
     <meta name="description" content="Program kemitraan JULEMORI untuk kafe, restoran, reseler, dan distributor minuman kelor premium.">
     @viteReactRefresh
+    {!! \Illuminate\Support\Facades\Vite::fonts() !!}
     @vite('resources/js/app.jsx')
     <x-inertia::head />
 </head>

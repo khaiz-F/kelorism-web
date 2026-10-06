@@ -75,22 +75,27 @@ export default function SiteNavbar() {
 
     return (
         <header
-            className={`sticky top-0 z-50 border-b border-cream-2/70 bg-cream/90 backdrop-blur transition-shadow ${
-                scrolled ? 'shadow-[0_8px_24px_-16px_rgba(46,65,48,0.4)]' : ''
+            className={`sticky top-0 z-50 transition-all duration-300 ${
+                scrolled
+                    ? 'border-b border-cream-2/70 bg-cream/85 shadow-[0_8px_24px_-16px_rgba(45,74,62,0.4)] backdrop-blur'
+                    : 'border-b border-transparent bg-transparent'
             }`}
         >
-            <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3" aria-label="Navigasi utama">
+            <nav
+                className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 md:h-20"
+                aria-label="Navigasi utama"
+            >
                 <Wordmark />
 
-                <div className="hidden items-center gap-10 md:flex">
+                <div className="hidden items-center gap-9 md:flex">
                     {navItems.map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`rounded-full px-2 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-forest ${
+                            className={`rounded px-1 py-2 text-sm font-semibold tracking-wide transition-colors focus-visible:outline-2 focus-visible:outline-forest ${
                                 isActive(item.href)
-                                    ? 'bg-sage-pale text-forest'
-                                    : 'text-ink-soft hover:bg-sage-pale/60 hover:text-forest'
+                                    ? 'text-forest underline decoration-pink decoration-2 underline-offset-8'
+                                    : 'text-ink-soft hover:text-forest'
                             }`}
                         >
                             {item.label}
@@ -200,7 +205,7 @@ export default function SiteNavbar() {
             </nav>
 
             {mobileOpen && (
-                <div className="border-t border-cream-2 bg-cream px-5 py-4 md:hidden">
+                <div className="border-t border-cream-2 bg-cream px-5 pb-6 pt-4 md:hidden">
                     <div className="flex flex-col gap-1">
                         {navItems.map((item) => (
                             <Link

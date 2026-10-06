@@ -223,7 +223,7 @@ class PageController extends Controller
                 'id' => 'kelor-golden-turmeric',
                 'nama' => 'Kelor Golden Turmeric',
                 'tagline' => 'Kunyit dan kelor hangat dengan susu oat — golden latte penuh manfaat.',
-                'harga' => 27000,
+                'harga' => 15000,
                 'base' => 'plant',
                 'kategori' => 'Warm Elixir',
                 'sustainable' => true,
@@ -331,8 +331,9 @@ class PageController extends Controller
         return [
             'hero' => [
                 'eyebrow' => 'Kafe Kelor Premium',
-                'judul' => 'Nongkrong Enak, Badan Sehat, Bumi Tersenyum',
-                'subjudul' => 'Minuman kelor dari petani lokal — rendah gula, jujur soal nutrisi, dan dikemas tanpa sampah berlebih. Waktu nongkrongmu jadi momen yang bikin bumi senang.',
+                // "\n" memisah dua baris lockup editorial di hero (lihat Home.jsx).
+                'judul' => "Nongkrong Enak,\nBadan Sehat.",
+                'subjudul' => 'Minuman kelor yang menyesuaikan kebutuhanmu.',
             ],
             'marquee' => [
                 '100% Susu Nabati',
@@ -489,21 +490,10 @@ class PageController extends Controller
      */
     public function beranda(): \Inertia\Response
     {
-        $menuPublik = $this->menuItemsUntukPublik();
-
         return Inertia::render('Home', static::home() + [
-            // Menu favorit dari database (menu baru Kelora), fallback ke
-            // daftar statis lama bila tabel kosong — beranda tak boleh 500.
-            'favorit' => array_slice($menuPublik, 0, 3),
-
-            // Slideshow hero: hanya item berfoto — nama + deskripsi sinkron
-            // dengan gambar di kartu info. Urutan diacak sisi klien per reload.
-            'heroMenu' => array_values(array_map(fn ($m) => [
-                'nama' => $m['nama'],
-                'deskripsi' => $m['tagline'],
-                'image' => $m['image'],
-                'sustainable' => $m['sustainable'],
-            ], array_filter($menuPublik, fn ($m) => ! empty($m['image'])))),
+            // Menu lengkap dari database (menu Kelora), fallback ke daftar
+            // statis lama bila tabel kosong — beranda tak boleh 500.
+            'produk' => $this->menuItemsUntukPublik(),
         ]);
     }
 

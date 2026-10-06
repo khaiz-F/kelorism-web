@@ -6,23 +6,25 @@
 @theme {
     --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-display: 'Archivo', 'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Fraunces', ui-serif, Georgia, 'Times New Roman', serif;
 
-    --color-cream: #f7f4ea;
-    --color-cream-2: #efead9;
-    --color-forest: #2e4130;
-    --color-forest-2: #243424;
-    --color-sage: #6e9463;
-    --color-sage-light: #a9c79a;
-    --color-sage-pale: #e4eedd;
+    --color-cream: #f8f5ed;
+    --color-cream-2: #eee8da;
+    --color-forest: #2d4a3e;
+    --color-forest-2: #213a30;
+    --color-sage: #6a9c89;
+    --color-sage-light: #a1c8b5;
+    --color-sage-pale: #e2eee6;
+    --color-pink: #e2a9be;
+    --color-pink-light: #f2c6d4;
+    --color-pink-pale: #faeaf0;
     --color-gold: #c89a3e;
     --color-gold-light: #ead9ad;
-    --color-ink: #20261c;
-    --color-ink-soft: #5b6656;
+    --color-ink: #1f2e26;
+    --color-ink-soft: #5b6a60;
     --color-paper: #ffffff;
 
-    --animate-marquee: marquee 28s linear infinite;
+    --animate-marquee: marquee 32s linear infinite;
 
     @keyframes marquee {
         from {
@@ -66,22 +68,25 @@ html {
 }
 
 html.theme-kelor {
-    --color-cream: #f7f4ea;
-    --color-cream-2: #efead9;
-    --color-forest: #2e4130;
-    --color-forest-2: #243424;
-    --color-sage: #6e9463;
-    --color-sage-light: #a9c79a;
-    --color-sage-pale: #e4eedd;
+    --color-cream: #f8f5ed;
+    --color-cream-2: #eee8da;
+    --color-forest: #2d4a3e;
+    --color-forest-2: #213a30;
+    --color-sage: #6a9c89;
+    --color-sage-light: #a1c8b5;
+    --color-sage-pale: #e2eee6;
+    --color-pink: #e2a9be;
+    --color-pink-light: #f2c6d4;
+    --color-pink-pale: #faeaf0;
     --color-gold: #c89a3e;
     --color-gold-light: #ead9ad;
-    --color-ink: #20261c;
-    --color-ink-soft: #5b6656;
+    --color-ink: #1f2e26;
+    --color-ink-soft: #5b6a60;
     --color-paper: #ffffff;
-    --color-bg: #f7f4ea;
-    --color-text: #20261c;
-    --color-primary: #6e9463;
-    --tombol-teks: #f7f4ea;
+    --color-bg: #f8f5ed;
+    --color-text: #1f2e26;
+    --color-primary: #6a9c89;
+    --tombol-teks: #f8f5ed;
 }
 
 html.theme-earth {
@@ -138,12 +143,12 @@ html[data-tema='custom'][data-tema-gelap='1'] {
 
 /* Daun kelor mengambang di hero — pelan, hanya dua kecepatan. */
 .leaf-drift {
-    animation: leaf-drift 7s ease-in-out infinite;
+    animation: leaf-drift 9s ease-in-out infinite;
 }
 
 .leaf-drift-slow {
-    animation-duration: 9s;
-    animation-delay: -3s;
+    animation-duration: 12s;
+    animation-delay: -4s;
 }
 
 @keyframes leaf-drift {
@@ -152,8 +157,55 @@ html[data-tema='custom'][data-tema-gelap='1'] {
         transform: translateY(0) rotate(0deg);
     }
     50% {
-        transform: translateY(-12px) rotate(3deg);
+        transform: translateY(-10px) rotate(2deg);
     }
+}
+
+/* Idle float produk hero — naik-turun pelan, premium & tenang. */
+.float-soft {
+    animation: float-soft 5.5s ease-in-out infinite;
+}
+
+@keyframes float-soft {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Indikator gulir di hero — garis kecil yang menjatuhkan diri berulang. */
+.scroll-cue-line {
+    transform-origin: top;
+    animation: scroll-cue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes scroll-cue {
+    0% {
+        transform: scaleY(0);
+    }
+    45% {
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+    55% {
+        transform-origin: bottom;
+    }
+    100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
+}
+
+/* Scrollbar strip produk disembunyikan — native scroll + snap tetap aktif. */
+.no-scrollbar {
+    scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -161,7 +213,9 @@ html[data-tema='custom'][data-tema-gelap='1'] {
         scroll-behavior: auto;
     }
 
-    .leaf-drift {
+    .leaf-drift,
+    .float-soft,
+    .scroll-cue-line {
         animation: none;
     }
 

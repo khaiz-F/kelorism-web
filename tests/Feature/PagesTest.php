@@ -31,18 +31,16 @@ class PagesTest extends TestCase
         ];
     }
 
-    public function test_beranda_menampilkan_favorit_dari_menu_baru(): void
+    public function test_beranda_menampilkan_produk_dari_menu_baru(): void
     {
         $this->seed(\Database\Seeders\MenuSeeder::class);
 
         $props = $this->get('/beranda')->assertOk()->inertiaProps();
 
-        // 3 favorit pertama = item urutan teratas menu baru (Kelora Oat dst.).
-        $this->assertCount(3, $props['favorit']);
-        $this->assertSame('Kelora Oat', $props['favorit'][0]['nama']);
-        $this->assertSame('diet', $props['favorit'][0]['kategori']);
-        $this->assertSame('Kelora Oat Strawberry', $props['favorit'][1]['nama']);
-        $this->assertSame('Kelora Oat Blueberry', $props['favorit'][2]['nama']);
+        // Menu lengkap menu baru (KELORA BERRY dst.) — urutan teratas.
+        $this->assertSame('KELORA BERRY – STRAWBERRY OAT KELORA', $props['produk'][0]['nama']);
+        $this->assertSame('KELORA BLUEBERRY', $props['produk'][1]['nama']);
+        $this->assertSame('KELORA CHIA', $props['produk'][2]['nama']);
     }
 
     public function test_beranda_fallback_ke_menu_statis_bila_db_kosong(): void
@@ -50,7 +48,7 @@ class PagesTest extends TestCase
         // Tanpa seed — fallback ke daftar statis lama, bukan error.
         $props = $this->get('/beranda')->assertOk()->inertiaProps();
 
-        $this->assertNotEmpty($props['favorit']);
+        $this->assertNotEmpty($props['produk']);
     }
 
     public function test_pesan_kontak_valid_tersimpan_dan_redirect(): void
